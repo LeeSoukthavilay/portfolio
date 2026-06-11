@@ -1,0 +1,11 @@
+app = "portfolio-telemed-frontend"
+primary_region = "sin"
+[build]
+  image = "oven/bun:1.2-alpine"
+[env]
+  PORT = "80"
+[http_service]
+  internal_port = 80
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
