@@ -1,0 +1,142 @@
+include:
+  - docker-compose.infra.yml
+
+services:
+  # --- Portfolio Web ---
+  portfolio-web:
+    profiles: ["portfolio", "all"]
+    build:
+      context: ../apps/portfolio-web
+    container_name: portfolio-web
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres-portfolio:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-portfolio:5432/portfolio?sslmode=disable
+      AI_SERVICE_URL: http://ai-service:8000
+
+  # --- AI Service ---
+  ai-service:
+    profiles: ["ai", "all"]
+    build:
+      context: ../apps/ai-service
+    container_name: portfolio-ai-service
+    ports:
+      - "8000:8000"
+    depends_on:
+      qdrant:
+        condition: service_healthy
+    environment:
+      QDRANT_URL: http://qdrant:6333
+      QDRANT_API_KEY: ${QDRANT_API_KEY}
+      OPENAI_API_KEY: ${OPENAI_API_KEY}
+
+  # --- Trade ---
+  trade-backend:
+    profiles: ["trade", "all"]
+    build:
+      context: ../apps/trade-backend
+    container_name: portfolio-trade-backend
+    ports:
+      - "4001:4001"
+    depends_on:
+      postgres-trade:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-trade:5432/trade?sslmode=disable
+      KAFKA_BROKERS: kafka:9092
+
+  trade-frontend:
+    profiles: ["trade", "all"]
+    build:
+      context: ../apps/trade-frontend
+    container_name: portfolio-trade-frontend
+    ports:
+      - "5173:5173"
+    environment:
+      VITE_API_URL: http://trade-backend:4001
+
+  # --- Payment ---
+  payment-backend:
+    profiles: ["payment", "all"]
+    build:
+      context: ../apps/payment-backend
+    container_name: portfolio-payment-backend
+    ports:
+      - "4002:4002"
+    depends_on:
+      postgres-payment:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-payment:5432/payment?sslmode=disable
+      RABBITMQ_URL: amqp://${RABBITMQ_DEFAULT_USER}:${RABBITMQ_DEFAULT_PASS}@rabbitmq:5672
+
+  payment-frontend:
+    profiles: ["payment", "all"]
+    build:
+      context: ../apps/payment-frontend
+    container_name: portfolio-payment-frontend
+    ports:
+      - "5174:5174"
+    environment:
+      VITE_API_URL: http://payment-backend:4002
+
+  # --- E-Commerce ---
+  ecom-backend:
+    profiles: ["ecom", "all"]
+    build:
+      context: ../apps/ecom-backend
+    container_name: portfolio-ecom-backend
+    ports:
+      - "4003:4003"
+    depends_on:
+      postgres-ecom:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-ecom:5432/ecom?sslmode=disable
+
+  ecom-frontend:
+    profiles: ["ecom", "all"]
+    build:
+      context: ../apps/ecom-frontend
+    container_name: portfolio-ecom-frontend
+    ports:
+      - "5175:5175"
+    environment:
+      VITE_API_URL: http://ecom-backend:4003
+
+  # --- Telemedicine ---
+  telemed-backend:
+    profiles: ["telemed", "all"]
+    build:
+      context: ../apps/telemed-backend
+    container_name: portfolio-telemed-backend
+    ports:
+      - "4004:4004"
+    depends_on:
+      postgres-telemed:
+        condition: service_healthy
+      mongo-telemed:
+        condition: service_healthy
+      kafka:
+        condition: service_started
+    environment:
+      DATABASE_URL: postgres://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres-telemed:5432/telemed?sslmode=disable
+
+  telemed-frontend:
+    profiles: ["telemed", "all"]
+    build:
+      context: ../apps/telemed-frontend
+    container_name: portfolio-telemed-frontend
+    ports:
+      - "5176:5176"
+    environment:
+      VITE_API_URL: http://telemed-backend:4004
