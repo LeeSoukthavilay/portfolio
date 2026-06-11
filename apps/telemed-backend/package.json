@@ -1,0 +1,20 @@
+{
+  "name": "@portfolio/telemed-backend",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@portfolio/shared-types": "workspace:*",
+    "elysia": "^1.2.4",
+    "@elysiajs/cors": "^1.2.0",
+    "socket.io": "^4.8.1"
+  },
+  "devDependencies": {
+    "@types/bun": "latest",
+    "typescript": "^5.7.0"
+  }
+}
