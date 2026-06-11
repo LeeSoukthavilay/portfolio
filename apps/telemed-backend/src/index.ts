@@ -2,11 +2,12 @@ import { Elysia } from "elysia";
 import { cors } from "@elysiajs/cors";
 import { Server } from "socket.io";
 import { createServer } from "http";
+import type { IncomingMessage, ServerResponse } from "http";
 import { ChatQueueEngine } from "./queue";
 import type { Message } from "@portfolio/shared-types";
 
+const PORT = 4004;
 const engine = new ChatQueueEngine();
-const httpServer = createServer();
 
 const app = new Elysia()
   .use(cors())
@@ -22,8 +23,31 @@ const app = new Elysia()
   )
   .get("/rooms/:id/messages", ({ params }) => ({
     messages: engine.getMessages(params.id),
-  }))
-  .listen(4004);
+  }));
+
+const httpServer = createServer(
+  async (req: IncomingMessage, res: ServerResponse) => {
+    const url = `http://localhost:${PORT}${req.url || "/"}`;
+    const headers = new Headers();
+    for (let i = 0; i < req.rawHeaders.length; i += 2) {
+      headers.set(req.rawHeaders[i]!, req.rawHeaders[i + 1]!);
+    }
+
+    try {
+      const webRes = await app.fetch(
+        new Request(url, { method: req.method || "GET", headers })
+      );
+      res.writeHead(
+        webRes.status,
+        Object.fromEntries(webRes.headers.entries())
+      );
+      res.end(await webRes.text());
+    } catch {
+      res.writeHead(500);
+      res.end("Internal Server Error");
+    }
+  }
+);
 
 const io = new Server(httpServer, { cors: { origin: "*" } });
 
@@ -64,5 +88,5 @@ io.on("connection", (socket) => {
   });
 });
 
-httpServer.listen(4005);
-console.log(`Telemedicine backend: HTTP :4004, WS :4005`);
+httpServer.listen(PORT);
+console.log(`Telemedicine backend running on http://localhost:${PORT}`);

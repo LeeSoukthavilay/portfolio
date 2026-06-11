@@ -3,7 +3,7 @@ import { io, Socket } from "socket.io-client";
 import type { Message, Room, ChatEvent } from "@portfolio/shared-types";
 
 const API_URL = "http://localhost:4004";
-const WS_URL = "http://localhost:4005";
+const WS_URL = "http://localhost:4004";
 
 function CreateRoomForm({ onRoomCreated }: { onRoomCreated: (room: Room) => void }) {
   const [patientName, setPatientName] = useState("");

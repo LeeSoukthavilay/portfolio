@@ -32,12 +32,13 @@ export class OrderBookEngine {
   private matchBuy(order: Order): TradeEvent[] {
     const trades: TradeEvent[] = [];
     const askPrices = [...this.asks.levels.keys()].sort((a, b) => a - b);
+    let remainingQty = order.quantity;
 
     for (const askPrice of askPrices) {
       if (order.price < askPrice) break;
       const level = this.asks.levels.get(askPrice)!;
       const orders = this.asks.orders.get(askPrice)!;
-      const matchQty = Math.min(order.quantity, level.quantity);
+      const matchQty = Math.min(remainingQty, level.quantity);
 
       trades.push({
         id: crypto.randomUUID(),
@@ -48,17 +49,17 @@ export class OrderBookEngine {
         timestamp: new Date().toISOString(),
       });
 
-      order.quantity -= matchQty;
+      remainingQty -= matchQty;
       level.quantity -= matchQty;
       if (level.quantity === 0) {
         this.asks.levels.delete(askPrice);
         this.asks.orders.delete(askPrice);
       }
-      if (order.quantity === 0) break;
+      if (remainingQty === 0) break;
     }
 
-    if (order.quantity > 0) {
-      this.addToSide(this.bids, order);
+    if (remainingQty > 0) {
+      this.addToSide(this.bids, { ...order, quantity: remainingQty });
     }
     return trades;
   }
@@ -66,12 +67,13 @@ export class OrderBookEngine {
   private matchSell(order: Order): TradeEvent[] {
     const trades: TradeEvent[] = [];
     const bidPrices = [...this.bids.levels.keys()].sort((a, b) => b - a);
+    let remainingQty = order.quantity;
 
     for (const bidPrice of bidPrices) {
       if (order.price > bidPrice) break;
       const level = this.bids.levels.get(bidPrice)!;
       const orders = this.bids.orders.get(bidPrice)!;
-      const matchQty = Math.min(order.quantity, level.quantity);
+      const matchQty = Math.min(remainingQty, level.quantity);
 
       trades.push({
         id: crypto.randomUUID(),
@@ -82,17 +84,17 @@ export class OrderBookEngine {
         timestamp: new Date().toISOString(),
       });
 
-      order.quantity -= matchQty;
+      remainingQty -= matchQty;
       level.quantity -= matchQty;
       if (level.quantity === 0) {
         this.bids.levels.delete(bidPrice);
         this.bids.orders.delete(bidPrice);
       }
-      if (order.quantity === 0) break;
+      if (remainingQty === 0) break;
     }
 
-    if (order.quantity > 0) {
-      this.addToSide(this.asks, order);
+    if (remainingQty > 0) {
+      this.addToSide(this.asks, { ...order, quantity: remainingQty });
     }
     return trades;
   }

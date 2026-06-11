@@ -34,16 +34,15 @@ async function main() {
     .post(
       "/checkout",
       async ({ body }) => {
-        const { cartId, idempotencyKey } = body;
+        const { productId, idempotencyKey } = body;
 
-        const productList = await db.getProducts();
-        const totalAmount = productList.reduce(
-          (sum: number, p: any) => sum + Number(p.price || 0),
-          0
-        );
+        const product = await db.getProduct(productId);
+        if (!product) return new Response("Product not found", { status: 404 });
+
+        const totalAmount = Number(product.price);
 
         const order = await db.createOrder({
-          cartId,
+          cartId: `cart_${productId}`,
           totalAmount,
           idempotencyKey,
         });
@@ -51,7 +50,7 @@ async function main() {
         if (channel) {
           await publishCheckout(channel, {
             type: "checkout.requested",
-            cartId,
+            cartId: `cart_${productId}`,
             totalAmount,
             idempotencyKey,
             timestamp: new Date().toISOString(),
@@ -67,7 +66,7 @@ async function main() {
       },
       {
         body: t.Object({
-          cartId: t.String(),
+          productId: t.String(),
           idempotencyKey: t.String(),
         }),
       }

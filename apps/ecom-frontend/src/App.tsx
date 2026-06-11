@@ -88,7 +88,7 @@ export default function App() {
       const res = await fetch(`${API_URL}/checkout`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ cartId: `cart_${_productId}`, idempotencyKey }),
+        body: JSON.stringify({ productId: _productId, idempotencyKey }),
       });
 
       if (!res.ok) throw new Error(`Checkout failed: ${res.status}`);
