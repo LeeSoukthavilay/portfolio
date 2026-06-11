@@ -14,10 +14,10 @@ jobs:
       apps: ${{ steps.filter.outputs.apps }}
     steps:
       - uses: actions/checkout@v4
-      - uses: tj-actions/changed-files@v44
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         id: filter
         with:
-          files_yaml: |
+          filters: |
             packages:
               - 'packages/**'
             apps:
@@ -30,7 +30,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun install
+      - run: bun install --frozen-lockfile
       - run: bun run lint
       - run: bun run typecheck
 
@@ -41,5 +41,5 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: oven-sh/setup-bun@v2
-      - run: bun install
+      - run: bun install --frozen-lockfile
       - run: bun run test

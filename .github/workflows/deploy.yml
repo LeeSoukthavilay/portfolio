@@ -11,20 +11,31 @@ jobs:
       matrix: ${{ steps.filter.outputs.changes }}
     steps:
       - uses: actions/checkout@v4
-      - uses: tj-actions/changed-files@v44
+      - uses: dorny/paths-filter@de90cc6fb38fc0963ad72b210f1f284cd68cea36 # v3.0.2
         id: filter
         with:
-          files_yaml: |
-            portfolio-web: apps/portfolio-web/**
-            ai-service: apps/ai-service/**
-            trade-backend: apps/trade-backend/**
-            trade-frontend: apps/trade-frontend/**
-            payment-backend: apps/payment-backend/**
-            payment-frontend: apps/payment-frontend/**
-            ecom-backend: apps/ecom-backend/**
-            ecom-frontend: apps/ecom-frontend/**
-            telemed-backend: apps/telemed-backend/**
-            telemed-frontend: apps/telemed-frontend/**
+          list-files: json
+          filters: |
+            portfolio-web:
+              - 'apps/portfolio-web/**'
+            ai-service:
+              - 'apps/ai-service/**'
+            trade-backend:
+              - 'apps/trade-backend/**'
+            trade-frontend:
+              - 'apps/trade-frontend/**'
+            payment-backend:
+              - 'apps/payment-backend/**'
+            payment-frontend:
+              - 'apps/payment-frontend/**'
+            ecom-backend:
+              - 'apps/ecom-backend/**'
+            ecom-frontend:
+              - 'apps/ecom-frontend/**'
+            telemed-backend:
+              - 'apps/telemed-backend/**'
+            telemed-frontend:
+              - 'apps/telemed-frontend/**'
 
   deploy:
     needs: detect-changes
