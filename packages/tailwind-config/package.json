@@ -1,6 +1,7 @@
 {
   "name": "@portfolio/tailwind-config",
   "private": true,
+  "type": "module",
   "exports": {
     ".": "./index.ts"
   },
