@@ -77,7 +77,7 @@ function OrderBookLevelRow({ level, maxQuantity, type }: { level: OrderBookLevel
   );
 }
 
-function OrderBookView({ orderBook }: { orderBook: OrderBook }) {
+function OrderBookView({ orderBook }: { orderBook: OrderBook | null }) {
   if (!orderBook) {
     return <div className="p-6 text-text-muted text-center">Waiting for order book data...</div>;
   }
