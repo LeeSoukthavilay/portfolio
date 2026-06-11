@@ -11,7 +11,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: trade
     volumes:
-      - pg_trade:/var/lib/postgresql/data
+      - pg_trade:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d trade"]
       interval: 10s
@@ -29,7 +29,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: payment
     volumes:
-      - pg_payment:/var/lib/postgresql/data
+      - pg_payment:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d payment"]
       interval: 10s
@@ -47,7 +47,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: ecom
     volumes:
-      - pg_ecom:/var/lib/postgresql/data
+      - pg_ecom:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ecom"]
       interval: 10s
@@ -65,7 +65,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: telemed
     volumes:
-      - pg_telemed:/var/lib/postgresql/data
+      - pg_telemed:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d telemed"]
       interval: 10s
@@ -83,7 +83,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_DB: portfolio
     volumes:
-      - pg_portfolio:/var/lib/postgresql/data
+      - pg_portfolio:/var/lib/postgresql
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d portfolio"]
       interval: 10s
