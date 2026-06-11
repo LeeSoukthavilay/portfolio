@@ -1,4 +1,4 @@
-app = "portfolio-ai-service"
+app = "lees-ai"
 primary_region = "sin"
 
 [build]
