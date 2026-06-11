@@ -1,7 +1,7 @@
 app = "portfolio-payment-frontend"
 primary_region = "sin"
 [build]
-  image = "oven/bun:1.2-alpine"
+  dockerfile = "Dockerfile"
 [env]
   PORT = "80"
 [http_service]

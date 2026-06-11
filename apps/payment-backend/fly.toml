@@ -2,7 +2,7 @@ app = "portfolio-payment-backend"
 primary_region = "sin"
 
 [build]
-  image = "golang:1.24-alpine"
+  dockerfile = "Dockerfile"
 
 [env]
   PORT = "4002"

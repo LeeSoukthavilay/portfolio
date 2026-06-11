@@ -1,7 +1,5 @@
 FROM oven/bun:1.2-alpine
 WORKDIR /app
-COPY package.json bun.lock ./
-RUN bun install --frozen-lockfile --production
-COPY . .
+COPY dist ./
 EXPOSE 4003
-CMD ["bun", "src/index.ts"]
+CMD ["bun", "run", "index.js"]

@@ -4,7 +4,7 @@ kill_signal = "SIGINT"
 kill_timeout = "5s"
 
 [build]
-  image = "oven/bun:1.2-alpine"
+  dockerfile = "Dockerfile"
 
 [env]
   PORT = "4001"

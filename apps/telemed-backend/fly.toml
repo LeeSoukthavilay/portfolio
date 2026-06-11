@@ -4,31 +4,14 @@ kill_signal = "SIGINT"
 kill_timeout = "5s"
 
 [build]
-  image = "oven/bun:1.2-alpine"
+  dockerfile = "Dockerfile"
 
 [env]
   PORT = "4004"
 
-[[services]]
+[http_service]
   internal_port = 4004
-  protocol = "tcp"
-  [services.concurrency]
-    type = "connections"
-    hard_limit = 25
-    soft_limit = 20
-
-[[services.ports]]
-  port = 4004
-  handlers = ["http"]
-
-[[services]]
-  internal_port = 4005
-  protocol = "tcp"
-  [services.concurrency]
-    type = "connections"
-    hard_limit = 100
-    soft_limit = 50
-
-[[services.ports]]
-  port = 4005
-  handlers = ["http"]
+  force_https = false
+  auto_stop_machines = "stop"
+  auto_start_machines = true
+  min_machines_running = 0
