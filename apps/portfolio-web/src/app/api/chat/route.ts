@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    const result = await bffFetch("ai", "/api/chat", {
+    const result = await bffFetch("ai", "/chat", {
       method: "POST",
       body: JSON.stringify(body),
     });
