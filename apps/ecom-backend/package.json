@@ -1,0 +1,22 @@
+{
+  "name": "@portfolio/ecom-backend",
+  "private": true,
+  "scripts": {
+    "dev": "bun --watch src/index.ts",
+    "build": "bun build src/index.ts --outdir dist --target bun",
+    "test": "bun test",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@portfolio/shared-types": "workspace:*",
+    "amqplib": "^0.10.5",
+    "elysia": "^1.2.4",
+    "@elysiajs/cors": "^1.2.0",
+    "postgres": "^3.4.5"
+  },
+  "devDependencies": {
+    "@types/amqplib": "^0.10.6",
+    "@types/bun": "latest",
+    "typescript": "^5.7.0"
+  }
+}
