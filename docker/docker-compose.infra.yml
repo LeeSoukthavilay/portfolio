@@ -1,7 +1,7 @@
 services:
   # --- PostgreSQL Instances ---
   postgres-trade:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: portfolio-postgres-trade
     restart: unless-stopped
     ports:
@@ -19,7 +19,7 @@ services:
       retries: 5
 
   postgres-payment:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: portfolio-postgres-payment
     restart: unless-stopped
     ports:
@@ -37,7 +37,7 @@ services:
       retries: 5
 
   postgres-ecom:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: portfolio-postgres-ecom
     restart: unless-stopped
     ports:
@@ -55,7 +55,7 @@ services:
       retries: 5
 
   postgres-telemed:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: portfolio-postgres-telemed
     restart: unless-stopped
     ports:
@@ -73,7 +73,7 @@ services:
       retries: 5
 
   postgres-portfolio:
-    image: postgres:17-alpine
+    image: postgres:18-alpine
     container_name: portfolio-postgres-portfolio
     restart: unless-stopped
     ports:
