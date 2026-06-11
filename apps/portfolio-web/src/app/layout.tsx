@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import Navbar from "@/components/Navbar";
 import "./globals.css";
 
@@ -6,6 +6,13 @@ export const metadata: Metadata = {
   title: "Lee's Engineering Portfolio",
   description:
     "Senior Full-Stack Developer — Microservices Architecture Showcase",
+};
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  viewportFit: "cover",
+  themeColor: "#2563eb",
 };
 
 export default function RootLayout({
@@ -27,7 +34,14 @@ export default function RootLayout({
           rel="stylesheet"
         />
       </head>
-      <body className="bg-surface-muted text-text font-sans antialiased">
+      <body className="bg-surface-muted text-text font-sans antialiased"
+        style={{
+          paddingTop: "env(safe-area-inset-top)",
+          paddingBottom: "env(safe-area-inset-bottom)",
+          paddingLeft: "env(safe-area-inset-left)",
+          paddingRight: "env(safe-area-inset-right)",
+        } as React.CSSProperties}
+      >
         <Navbar />
         <main className="min-h-screen">{children}</main>
       </body>

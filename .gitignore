@@ -10,3 +10,4 @@ build/
 .turbo/
 resume.md
 __pycache__/
+*.tsbuildinfo

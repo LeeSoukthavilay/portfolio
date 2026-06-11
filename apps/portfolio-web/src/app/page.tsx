@@ -26,7 +26,7 @@ const projects = [
       </svg>
     ),
     href: "https://trade.leesportfolio.dev",
-    color: "border-l-brand-600",
+    color: "border-t-brand-600",
   },
   {
     id: "payment",
@@ -52,7 +52,7 @@ const projects = [
       </svg>
     ),
     href: "https://payment.leesportfolio.dev",
-    color: "border-l-green-600",
+    color: "border-t-green-600",
   },
   {
     id: "ecom",
@@ -79,7 +79,7 @@ const projects = [
       </svg>
     ),
     href: "https://ecom.leesportfolio.dev",
-    color: "border-l-purple-600",
+    color: "border-t-purple-600",
   },
   {
     id: "telemed",
@@ -104,7 +104,7 @@ const projects = [
       </svg>
     ),
     href: "https://telemed.leesportfolio.dev",
-    color: "border-l-teal-600",
+    color: "border-t-teal-600",
   },
 ];
 
@@ -116,33 +116,33 @@ export default function HomePage() {
       {/* Projects Section */}
       <section
         id="projects"
-        className="border-b border-surface-elevated bg-white py-20 sm:py-28"
+        className="border-b border-surface-elevated bg-white py-16 sm:py-24"
       >
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-text sm:text-4xl">
+          <div className="mb-10 sm:mb-12 text-center">
+            <h2 className="text-[clamp(1.5rem,4vw,2.25rem)] font-bold tracking-tight text-text text-wrap balance">
               Production Systems
             </h2>
-            <p className="mt-3 text-lg text-text-muted">
+            <p className="mt-3 text-[clamp(0.9375rem,2vw,1.125rem)] text-text-muted text-wrap pretty">
               Four microservices, each demonstrating a different architectural
               pattern and technology stack.
             </p>
           </div>
 
-          <div className="grid gap-6 sm:grid-cols-2">
+          <div className="grid gap-4 sm:gap-6 sm:grid-cols-2">
             {projects.map((project) => (
               <Link
                 key={project.id}
                 href={project.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`group rounded-xl border border-surface-elevated bg-surface-muted p-6 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 border-l-4 ${project.color}`}
+                className={`group rounded-xl border border-surface-elevated bg-surface-muted p-5 sm:p-6 shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 border-t-2 ${project.color}`}
               >
-                <div className="mb-4">{project.icon}</div>
-                <h3 className="mb-2 text-lg font-semibold text-text group-hover:text-brand-600 transition-colors">
+                <div className="mb-3 sm:mb-4">{project.icon}</div>
+                <h3 className="mb-2 text-base sm:text-lg font-semibold text-text group-hover:text-brand-600 transition-colors">
                   {project.title}
                 </h3>
-                <p className="mb-4 text-sm leading-relaxed text-text-muted">
+                <p className="mb-4 text-sm leading-relaxed text-text-muted text-wrap pretty">
                   {project.description}
                 </p>
                 <span className="inline-flex items-center rounded-full bg-brand-50 px-3 py-1 text-xs font-medium text-brand-700">
@@ -155,18 +155,18 @@ export default function HomePage() {
       </section>
 
       {/* Tech Stack Section */}
-      <section className="bg-surface-muted py-20 sm:py-28">
+      <section className="bg-surface-muted py-16 sm:py-24">
         <div className="mx-auto max-w-6xl px-4 sm:px-6">
-          <div className="mb-12 text-center">
-            <h2 className="text-3xl font-bold tracking-tight text-text sm:text-4xl">
+          <div className="mb-10 sm:mb-12 text-center">
+            <h2 className="text-[clamp(1.5rem,4vw,2.25rem)] font-bold tracking-tight text-text text-wrap balance">
               Technology Stack
             </h2>
-            <p className="mt-3 text-lg text-text-muted">
+            <p className="mt-3 text-[clamp(0.9375rem,2vw,1.125rem)] text-text-muted text-wrap pretty">
               Modern tools and frameworks powering every service.
             </p>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-3 sm:gap-4 grid-cols-2 lg:grid-cols-4">
             {[
               {
                 title: "Frontend",
@@ -211,20 +211,20 @@ export default function HomePage() {
             ].map((category) => (
               <div
                 key={category.title}
-                className="rounded-xl border border-surface-elevated bg-white p-6 shadow-sm"
+                className="rounded-xl border border-surface-elevated bg-white p-4 sm:p-6 shadow-sm"
               >
                 <h3
-                  className={`mb-4 text-sm font-semibold uppercase tracking-widest ${category.color}`}
+                  className={`mb-3 sm:mb-4 text-xs sm:text-sm font-semibold uppercase tracking-widest ${category.color}`}
                 >
                   {category.title}
                 </h3>
-                <ul className="space-y-2">
+                <ul className="space-y-1.5 sm:space-y-2">
                   {category.items.map((item) => (
                     <li
                       key={item}
-                      className="text-sm text-text-muted flex items-center gap-2"
+                      className="text-xs sm:text-sm text-text-muted flex items-center gap-2"
                     >
-                      <span className="h-1 w-1 rounded-full bg-text-subtle" />
+                      <span className="h-1 w-1 shrink-0 rounded-full bg-text-subtle" />
                       {item}
                     </li>
                   ))}
