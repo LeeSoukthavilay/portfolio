@@ -8,4 +8,3 @@ build/
 !.env.example
 *.log
 .turbo/
-resume.md
