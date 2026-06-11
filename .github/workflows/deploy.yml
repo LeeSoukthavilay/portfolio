@@ -1,0 +1,41 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  detect-changes:
+    runs-on: ubuntu-latest
+    outputs:
+      matrix: ${{ steps.filter.outputs.changes }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: tj-actions/changed-files@v44
+        id: filter
+        with:
+          files_yaml: |
+            portfolio-web: apps/portfolio-web/**
+            ai-service: apps/ai-service/**
+            trade-backend: apps/trade-backend/**
+            trade-frontend: apps/trade-frontend/**
+            payment-backend: apps/payment-backend/**
+            payment-frontend: apps/payment-frontend/**
+            ecom-backend: apps/ecom-backend/**
+            ecom-frontend: apps/ecom-frontend/**
+            telemed-backend: apps/telemed-backend/**
+            telemed-frontend: apps/telemed-frontend/**
+
+  deploy:
+    needs: detect-changes
+    if: needs.detect-changes.outputs.matrix != '[]'
+    strategy:
+      matrix:
+        app: ${{ fromJSON(needs.detect-changes.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: superfly/flyctl-actions/setup-flyctl@master
+      - run: flyctl deploy --app portfolio-${{ matrix.app }} --config apps/${{ matrix.app }}/fly.toml
+        env:
+          FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}

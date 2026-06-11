@@ -1,0 +1,10 @@
+node_modules/
+.bun-cache/
+.next/
+dist/
+build/
+.env
+.env.*
+!.env.example
+*.log
+.turbo/
