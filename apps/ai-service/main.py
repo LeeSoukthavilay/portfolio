@@ -58,4 +58,4 @@ async def chat(request: ChatRequest):
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "model": "gpt-4o-mini"}
+    return {"status": "ok", "model": "deepseek-chat", "embeddings": "all-MiniLM-L6-v2"}

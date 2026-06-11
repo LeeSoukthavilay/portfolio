@@ -1,5 +1,6 @@
 import os
-from langchain_openai import OpenAIEmbeddings, ChatOpenAI
+from langchain_openai import ChatOpenAI
+from langchain_huggingface import HuggingFaceEmbeddings
 from langchain_qdrant import QdrantVectorStore
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_core.prompts import ChatPromptTemplate
@@ -8,22 +9,35 @@ from langchain_core.runnables import RunnablePassthrough
 from qdrant_client import QdrantClient
 from qdrant_client.models import Distance, VectorParams
 
+EMBEDDING_DIM = 384  # all-MiniLM-L6-v2 output dimension
+
 
 class PortfolioRAG:
     def __init__(self):
         self.qdrant_url = os.getenv("QDRANT_URL", "http://localhost:6333")
         self.qdrant_api_key = os.getenv("QDRANT_API_KEY", "dev_key")
+        self.deepseek_api_key = os.getenv("DEEPSEEK_API_KEY", "")
         self.collection_name = "portfolio_content"
-        self.embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-        self.llm = ChatOpenAI(model="gpt-4o-mini", temperature=0.3)
-        self.client = QdrantClient(url=self.qdrant_url, api_key=self.qdrant_api_key)
+
+        self.embeddings = HuggingFaceEmbeddings(
+            model_name="sentence-transformers/all-MiniLM-L6-v2",
+            model_kwargs={"device": "cpu"},
+            encode_kwargs={"normalize_embeddings": True},
+        )
+        self.llm = ChatOpenAI(
+            base_url="https://api.deepseek.com/v1",
+            api_key=self.deepseek_api_key,
+            model="deepseek-chat",
+            temperature=0.3,
+        )
+        self.client = QdrantClient(url=self.qdrant_url, api_key=self.qdrant_api_key, https=False)
 
     def ensure_collection(self):
         collections = [c.name for c in self.client.get_collections().collections]
         if self.collection_name not in collections:
             self.client.create_collection(
                 collection_name=self.collection_name,
-                vectors_config=VectorParams(size=1536, distance=Distance.COSINE),
+                vectors_config=VectorParams(size=EMBEDDING_DIM, distance=Distance.COSINE),
             )
 
     def index_documents(self, documents: list[dict[str, str]]):
